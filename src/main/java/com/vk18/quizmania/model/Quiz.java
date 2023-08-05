@@ -12,9 +12,9 @@ import java.util.List;
 @Entity
 public class Quiz extends BaseModel{
     @ManyToOne
-    private User createdBy;
+    private Instructor instructor;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Question> questions;
     private String category;
-    private int maxScore;
+
 }

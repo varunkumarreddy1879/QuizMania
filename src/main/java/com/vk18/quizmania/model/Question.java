@@ -3,13 +3,13 @@ package com.vk18.quizmania.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Entity
 @Data
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "question_type", discriminatorType = DiscriminatorType.STRING)
 public class Question extends BaseModel{
-    private String question;
+    private String description;
+    private int points;
     @Enumerated(EnumType.ORDINAL)
     private DifficultyLevel difficultyLevel;
-    private String answer;
-    @ManyToOne
-    private User createdBy;
 }
