@@ -16,5 +16,4 @@ public class Quiz extends BaseModel{
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Question> questions;
     private String category;
-
 }

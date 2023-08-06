@@ -14,7 +14,7 @@ public interface InstructorRepository extends JpaRepository<Instructor,Long> {
     public Optional<Instructor> findByPhone(String phone);
 
     public Optional<Instructor> findById(Long id);
-    public void delete(Student student);
+    public void delete(Instructor instructor);
     public List<Instructor> findAll();
 
 }

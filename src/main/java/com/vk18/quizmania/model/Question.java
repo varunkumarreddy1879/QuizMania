@@ -12,4 +12,7 @@ public class Question extends BaseModel{
     private int points;
     @Enumerated(EnumType.ORDINAL)
     private DifficultyLevel difficultyLevel;
+    @ManyToOne
+    private Instructor createdBy;
+
 }
