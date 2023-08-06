@@ -3,7 +3,7 @@ package com.vk18.quizmania.controller;
 import com.vk18.quizmania.dtos.AddMultipleChoiceQuestionRequestDto;
 import com.vk18.quizmania.dtos.MultipleChoiceResponseDto;
 import com.vk18.quizmania.dtos.OptionDto;
-import com.vk18.quizmania.dtos.updateMultipleChoiceQuestionRequestDto;
+import com.vk18.quizmania.dtos.UpdateMultipleChoiceQuestionRequestDto;
 import com.vk18.quizmania.exception.InvalidArgumentException;
 import com.vk18.quizmania.model.DifficultyLevel;
 import com.vk18.quizmania.model.MultipleChoiceQuestion;
@@ -53,7 +53,7 @@ public class MultipleChoiceQuestionController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<MultipleChoiceResponseDto> update(@RequestBody updateMultipleChoiceQuestionRequestDto requestDto){
+    public ResponseEntity<MultipleChoiceResponseDto> update(@RequestBody UpdateMultipleChoiceQuestionRequestDto requestDto){
         Long questionId= requestDto.getQuestionId();
         Long instructorId=requestDto.getInstructorId();
         String description=requestDto.getDescription();

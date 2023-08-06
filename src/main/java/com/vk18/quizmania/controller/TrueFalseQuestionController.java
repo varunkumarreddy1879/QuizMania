@@ -44,7 +44,7 @@ public class TrueFalseQuestionController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<TrueFalseResponseDto> update(@RequestBody updateTrueFalseQuestionRequestDto requestDto){
+    public ResponseEntity<TrueFalseResponseDto> update(@RequestBody UpdateTrueFalseQuestionRequestDto requestDto){
         Long questionId= requestDto.getQuestionId();
         Long instructorId=requestDto.getInstructorId();
         String description=requestDto.getDescription();
