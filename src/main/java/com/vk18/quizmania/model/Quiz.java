@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 @Entity
 public class Quiz extends BaseModel{
+    private String quizDescription;
     @ManyToOne
     private Instructor instructor;
     @ManyToMany(fetch = FetchType.EAGER)
