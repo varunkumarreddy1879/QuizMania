@@ -167,4 +167,15 @@ public class QuizService {
 
         return removedQuestions;
     }
+
+    public Quiz get(Long quizId) throws InvalidArgumentException {
+
+        Optional<Quiz> optionalQuiz=quizRepository.findById(quizId);
+        if(optionalQuiz.isEmpty()){
+            throw new InvalidArgumentException("Quiz id : "+ quizId + " is invalid.");
+        }
+
+        return optionalQuiz.get();
+
+    }
 }

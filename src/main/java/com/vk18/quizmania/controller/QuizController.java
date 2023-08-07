@@ -66,6 +66,22 @@ public class QuizController {
 
     }
 
+    @GetMapping("/get/{quizId}")
+    public ResponseEntity<QuizResponseDto> get(@PathVariable Long quizId){
+
+        try{
+            Quiz quiz=quizService.get(quizId);
+            return ResponseEntity.status(HttpStatus.OK).body(quizToResponseDto(quiz));
+        }
+        catch (InvalidArgumentException e){
+            return ResponseEntity.status(HttpStatus.valueOf(e.getMessage())).build();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @DeleteMapping("/delete")
     public ResponseEntity<QuizResponseDto> delete(@RequestBody DeleteQuizRequestDto requestDto){
         Long instructorId=requestDto.getInstructorId();
@@ -132,9 +148,6 @@ public class QuizController {
         }
 
     }
-
-
-
 
 
     public QuizResponseDto quizToResponseDto(Quiz quiz){

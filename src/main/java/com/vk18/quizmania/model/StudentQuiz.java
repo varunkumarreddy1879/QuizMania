@@ -11,5 +11,5 @@ public class StudentQuiz extends BaseModel {
     private Student student;
     @ManyToOne
     private Quiz quiz;
-    private Double score;
+    private int score;
 }
