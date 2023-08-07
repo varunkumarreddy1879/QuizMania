@@ -10,4 +10,5 @@ public class AddFillBlankQuestionRequestDto {
     private int points;
     private DifficultyLevel difficultyLevel;
     private String correctAnswer;
+
 }

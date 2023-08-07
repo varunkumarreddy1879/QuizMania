@@ -3,6 +3,7 @@ package com.vk18.quizmania.controller;
 import com.vk18.quizmania.dtos.*;
 import com.vk18.quizmania.exception.InvalidArgumentException;
 import com.vk18.quizmania.model.DifficultyLevel;
+import com.vk18.quizmania.model.QuestionType;
 import com.vk18.quizmania.model.TrueFalseQuestion;
 import com.vk18.quizmania.service.TrueFalseQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,10 @@ public class TrueFalseQuestionController {
         DifficultyLevel difficultyLevel=requestDto.getDifficultyLevel();
         boolean correctAnswer=requestDto.isCorrectAnswer();
         int points=requestDto.getPoints();
+        QuestionType questionType=QuestionType.True_False;
 
         try{
-            TrueFalseQuestion trueFalseQuestion=trueFalseQuestionService.add(instructorId,description,difficultyLevel,correctAnswer,points);
+            TrueFalseQuestion trueFalseQuestion=trueFalseQuestionService.add(instructorId,description,difficultyLevel,correctAnswer,points,questionType);
             return ResponseEntity.status(HttpStatus.OK).body(trueFalseQuestionToResponseMapper(trueFalseQuestion));
         }
         catch (InvalidArgumentException e){
@@ -95,11 +97,11 @@ public class TrueFalseQuestionController {
         }
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<TrueFalseResponseDto>> getAllQuestions(){
+    @GetMapping("/getAll/{instructorId}")
+    public ResponseEntity<List<TrueFalseResponseDto>> getAllQuestions(@PathVariable  Long instructorId){
 
         try{
-            List<TrueFalseQuestion> trueFalseQuestions=trueFalseQuestionService.getAllQuestions();
+            List<TrueFalseQuestion> trueFalseQuestions=trueFalseQuestionService.getAllQuestions(instructorId);
             List<TrueFalseResponseDto> responseDtos=new ArrayList<>();
             for(TrueFalseQuestion trueFalseQuestion:trueFalseQuestions){
                 responseDtos.add(trueFalseQuestionToResponseMapper(trueFalseQuestion));
@@ -119,7 +121,7 @@ public class TrueFalseQuestionController {
         trueFalseResponseDto.setDescription(trueFalseQuestion.getDescription());
         trueFalseResponseDto.setPoints(trueFalseQuestion.getPoints());
         trueFalseResponseDto.setCorrectAnswer(trueFalseQuestion.isCorrectAnswer());
-
+        trueFalseResponseDto.setQuestionType(trueFalseQuestion.getType());
 
         return trueFalseResponseDto;
     }

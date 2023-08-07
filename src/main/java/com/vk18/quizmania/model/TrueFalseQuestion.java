@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 @Data
 @Entity
-@DiscriminatorValue("true_false")
+@DiscriminatorValue("True_False")
 public class TrueFalseQuestion extends Question {
     private boolean correctAnswer;
 }

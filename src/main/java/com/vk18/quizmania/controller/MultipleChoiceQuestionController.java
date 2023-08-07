@@ -8,6 +8,7 @@ import com.vk18.quizmania.exception.InvalidArgumentException;
 import com.vk18.quizmania.model.DifficultyLevel;
 import com.vk18.quizmania.model.MultipleChoiceQuestion;
 import com.vk18.quizmania.model.Option;
+import com.vk18.quizmania.model.QuestionType;
 import com.vk18.quizmania.service.MultipleChoiceQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,7 @@ public class MultipleChoiceQuestionController {
         DifficultyLevel difficultyLevel=requestDto.getDifficultyLevel();
         String correctAnswer=requestDto.getCorrectAnswer();
         int points=requestDto.getPoints();
+        QuestionType questionType=QuestionType.Multiple_Choice;
         List<Option> options=new ArrayList<>();
         for(OptionDto optionDto:requestDto.getOptions()){
             Option option=new Option();
@@ -40,7 +42,7 @@ public class MultipleChoiceQuestionController {
         }
 
         try{
-            MultipleChoiceQuestion multipleChoiceQuestion=multipleChoiceQuestionService.add(instructorId,description,difficultyLevel,correctAnswer,points,options);
+            MultipleChoiceQuestion multipleChoiceQuestion=multipleChoiceQuestionService.add(instructorId,description,difficultyLevel,correctAnswer,points,options,questionType);
             return ResponseEntity.status(HttpStatus.OK).body(multipleChoiceQuestionToResponseMapper(multipleChoiceQuestion));
         }
         catch (InvalidArgumentException e){
@@ -109,11 +111,11 @@ public class MultipleChoiceQuestionController {
         }
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<MultipleChoiceResponseDto>> getAllQuestions(){
+    @GetMapping("/getAll/{instructorId}")
+    public ResponseEntity<List<MultipleChoiceResponseDto>> getAllQuestions(@PathVariable Long instructorId){
 
         try{
-            List<MultipleChoiceQuestion> multipleChoiceQuestions=multipleChoiceQuestionService.getAllQuestions();
+            List<MultipleChoiceQuestion> multipleChoiceQuestions=multipleChoiceQuestionService.getAllQuestions(instructorId);
             List<MultipleChoiceResponseDto> responseDtos=new ArrayList<>();
             for(MultipleChoiceQuestion multipleChoiceQuestion:multipleChoiceQuestions){
                 responseDtos.add(multipleChoiceQuestionToResponseMapper(multipleChoiceQuestion));
@@ -133,6 +135,7 @@ public class MultipleChoiceQuestionController {
         multipleChoiceResponseDto.setDescription(multipleChoiceQuestion.getDescription());
         multipleChoiceResponseDto.setPoints(multipleChoiceQuestion.getPoints());
         multipleChoiceResponseDto.setCorrectAnswer(multipleChoiceQuestion.getCorrectAnswer());
+        multipleChoiceResponseDto.setQuestionType(multipleChoiceQuestion.getType());
         List<OptionDto> optionDtos=new ArrayList<>();
         for(Option option:multipleChoiceQuestion.getOptions()){
             OptionDto optionDto=new OptionDto();

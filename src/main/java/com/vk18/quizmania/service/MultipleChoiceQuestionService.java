@@ -4,8 +4,6 @@ import com.vk18.quizmania.exception.InvalidArgumentException;
 import com.vk18.quizmania.model.*;
 import com.vk18.quizmania.repository.InstructorRepository;
 import com.vk18.quizmania.repository.MultipleChoiceQuestionRepository;
-import org.apache.catalina.User;
-import org.apache.catalina.realm.UserDatabaseRealm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,7 @@ public class MultipleChoiceQuestionService {
         this.instructorRepository=instructorRepository;
     }
 
-    public MultipleChoiceQuestion add(Long instructorId, String description, DifficultyLevel difficultyLevel, String correctAnswer, int points, List<Option> options) throws InvalidArgumentException {
+    public MultipleChoiceQuestion add(Long instructorId, String description, DifficultyLevel difficultyLevel, String correctAnswer, int points, List<Option> options, QuestionType questionType) throws InvalidArgumentException {
         /*
         check instructor exist or not
         create question , save and return
@@ -41,6 +39,7 @@ public class MultipleChoiceQuestionService {
         question.setPoints(points);
         question.setCorrectAnswer(correctAnswer);
         question.setCreatedBy(optionalInstructor.get());
+        question.setType(questionType);
 
         return multipleChoiceQuestionRepository.save(question);
 
@@ -97,7 +96,12 @@ public class MultipleChoiceQuestionService {
         return optionalQuestion.get();
     }
 
-    public List<MultipleChoiceQuestion> getAllQuestions() {
-        return multipleChoiceQuestionRepository.findAll();
+    public List<MultipleChoiceQuestion> getAllQuestions(Long instructorId) throws InvalidArgumentException {
+        Optional<Instructor> optionalInstructor=instructorRepository.findById(instructorId);
+        if(optionalInstructor.isEmpty()){
+            throw new InvalidArgumentException("Instructor id : "+instructorId+" is invalid.");
+        }
+
+        return multipleChoiceQuestionRepository.findAllByCreatedBy(optionalInstructor.get());
     }
 }

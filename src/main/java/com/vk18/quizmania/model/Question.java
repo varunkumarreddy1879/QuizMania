@@ -14,5 +14,6 @@ public class Question extends BaseModel{
     private DifficultyLevel difficultyLevel;
     @ManyToOne
     private Instructor createdBy;
-
+    @Enumerated(EnumType.ORDINAL)
+    private QuestionType type;
 }

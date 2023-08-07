@@ -4,6 +4,7 @@ import com.vk18.quizmania.dtos.*;
 import com.vk18.quizmania.exception.InvalidArgumentException;
 import com.vk18.quizmania.model.DifficultyLevel;
 import com.vk18.quizmania.model.FillBlankQuestion;
+import com.vk18.quizmania.model.QuestionType;
 import com.vk18.quizmania.service.FillBlankQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,15 +25,16 @@ public class FillBlankQuestionController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<FillBlankResponseDto> add(@RequestBody UpdateFillBlankRequestDto requestDto){
+    public ResponseEntity<FillBlankResponseDto> add(@RequestBody AddFillBlankQuestionRequestDto requestDto){
         Long instructorId=requestDto.getInstructorId();
         String description=requestDto.getDescription();
         DifficultyLevel difficultyLevel=requestDto.getDifficultyLevel();
         String correctAnswer=requestDto.getCorrectAnswer();
         int points=requestDto.getPoints();
+        QuestionType questionType=QuestionType.Fill_Blank;
 
         try{
-            FillBlankQuestion fillBlankQuestion=fillBlankQuestionService.add(instructorId,description,difficultyLevel,correctAnswer,points);
+            FillBlankQuestion fillBlankQuestion=fillBlankQuestionService.add(instructorId,description,difficultyLevel,correctAnswer,points,questionType);
             return ResponseEntity.status(HttpStatus.OK).body(fillBlankQuestiontoResponseMapper(fillBlankQuestion));
         }
         catch (InvalidArgumentException e){
@@ -96,11 +98,11 @@ public class FillBlankQuestionController {
         }
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<FillBlankResponseDto>> getAllQuestions(){
+    @GetMapping("/getAll/{instructorId}")
+    public ResponseEntity<List<FillBlankResponseDto>> getAllQuestions(@PathVariable Long instructorId){
 
         try{
-            List<FillBlankQuestion> fillBlankQuestions=fillBlankQuestionService.getAllQuestions();
+            List<FillBlankQuestion> fillBlankQuestions=fillBlankQuestionService.getAllQuestions(instructorId);
             List<FillBlankResponseDto> responseDtos=new ArrayList<>();
             for(FillBlankQuestion fillBlankQuestion:fillBlankQuestions){
                 responseDtos.add(fillBlankQuestiontoResponseMapper(fillBlankQuestion));
@@ -120,6 +122,7 @@ public class FillBlankQuestionController {
         fillBlankResponseDto.setDescription(fillBlankQuestion.getDescription());
         fillBlankResponseDto.setPoints(fillBlankQuestion.getPoints());
         fillBlankResponseDto.setCorrectAnswer(fillBlankQuestion.getCorrectAnswer());
+        fillBlankResponseDto.setQuestionType(fillBlankQuestion.getType());
 
 
         return fillBlankResponseDto;

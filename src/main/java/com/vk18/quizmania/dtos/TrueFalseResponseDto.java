@@ -1,6 +1,7 @@
 package com.vk18.quizmania.dtos;
 
 import com.vk18.quizmania.model.DifficultyLevel;
+import com.vk18.quizmania.model.QuestionType;
 import lombok.Data;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public class TrueFalseResponseDto {
     private int points;
     private DifficultyLevel difficultyLevel;
     private boolean correctAnswer;
+    private QuestionType questionType;
 }

@@ -1,6 +1,7 @@
 package com.vk18.quizmania.dtos;
 
 import com.vk18.quizmania.model.DifficultyLevel;
+import com.vk18.quizmania.model.QuestionType;
 import lombok.Data;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public class MultipleChoiceResponseDto {
     private DifficultyLevel difficultyLevel;
     private String correctAnswer;
     private List<OptionDto> options;
+    private QuestionType questionType;
 }

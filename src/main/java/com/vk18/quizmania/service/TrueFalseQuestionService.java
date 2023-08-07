@@ -3,7 +3,6 @@ package com.vk18.quizmania.service;
 import com.vk18.quizmania.exception.InvalidArgumentException;
 import com.vk18.quizmania.model.*;
 import com.vk18.quizmania.repository.InstructorRepository;
-import com.vk18.quizmania.repository.MultipleChoiceQuestionRepository;
 import com.vk18.quizmania.repository.TrueFalseQuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ public class TrueFalseQuestionService {
         this.instructorRepository=instructorRepository;
     }
 
-    public TrueFalseQuestion add(Long instructorId, String description, DifficultyLevel difficultyLevel, boolean correctAnswer, int points) throws InvalidArgumentException {
+    public TrueFalseQuestion add(Long instructorId, String description, DifficultyLevel difficultyLevel, boolean correctAnswer, int points, QuestionType questionType) throws InvalidArgumentException {
         /*
         check instructor exist or not
         create question , save and return
@@ -39,6 +38,7 @@ public class TrueFalseQuestionService {
         question.setPoints(points);
         question.setCorrectAnswer(correctAnswer);
         question.setCreatedBy(optionalInstructor.get());
+        question.setType(questionType);
 
         return trueFalseQuestionRepository.save(question);
 
@@ -94,8 +94,12 @@ public class TrueFalseQuestionService {
         return optionalQuestion.get();
     }
 
-    public List<TrueFalseQuestion> getAllQuestions() {
-        return trueFalseQuestionRepository.findAll();
+    public List<TrueFalseQuestion> getAllQuestions(Long instructorId) throws InvalidArgumentException {
+        Optional<Instructor> optionalInstructor=instructorRepository.findById(instructorId);
+        if(optionalInstructor.isEmpty()){
+            throw new InvalidArgumentException("Instructor id : "+instructorId+" is invalid.");
+        }
+        return trueFalseQuestionRepository.findAllByCreatedBy(optionalInstructor.get());
     }
 
 

@@ -4,10 +4,9 @@ import com.vk18.quizmania.exception.InvalidArgumentException;
 import com.vk18.quizmania.model.DifficultyLevel;
 import com.vk18.quizmania.model.FillBlankQuestion;
 import com.vk18.quizmania.model.Instructor;
-import com.vk18.quizmania.model.TrueFalseQuestion;
+import com.vk18.quizmania.model.QuestionType;
 import com.vk18.quizmania.repository.FillBlankQuestionRepository;
 import com.vk18.quizmania.repository.InstructorRepository;
-import com.vk18.quizmania.repository.TrueFalseQuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,7 @@ public class FillBlankQuestionService {
         this.instructorRepository=instructorRepository;
     }
 
-    public FillBlankQuestion add(Long instructorId, String description, DifficultyLevel difficultyLevel, String correctAnswer, int points) throws InvalidArgumentException {
+    public FillBlankQuestion add(Long instructorId, String description, DifficultyLevel difficultyLevel, String correctAnswer, int points, QuestionType questionType) throws InvalidArgumentException {
         /*
         check instructor exist or not
         create question , save and return
@@ -42,6 +41,7 @@ public class FillBlankQuestionService {
         question.setPoints(points);
         question.setCorrectAnswer(correctAnswer);
         question.setCreatedBy(optionalInstructor.get());
+        question.setType(questionType);
 
         return fillBlankQuestionRepository.save(question);
 
@@ -97,8 +97,14 @@ public class FillBlankQuestionService {
         return optionalQuestion.get();
     }
 
-    public List<FillBlankQuestion> getAllQuestions() {
-        return fillBlankQuestionRepository.findAll();
+    public List<FillBlankQuestion> getAllQuestions(Long instructorId) throws InvalidArgumentException {
+
+        Optional<Instructor> optionalInstructor=instructorRepository.findById(instructorId);
+        if(optionalInstructor.isEmpty()){
+            throw new InvalidArgumentException("Instructor id : "+instructorId+" is invalid.");
+        }
+
+        return fillBlankQuestionRepository.findAllByCreatedBy(optionalInstructor.get());
     }
 
 }
